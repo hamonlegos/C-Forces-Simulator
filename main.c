@@ -14,50 +14,51 @@ int main() {
     Vector2 pullforce = {};
     Vector2 tforces = {};
     Vector2 mousepos = {};
-    float dist;
 
     SetTargetFPS(60);
     while (!WindowShouldClose()) {
         DrawFPS(0,0);
 
-        tforces.y += gforce.y + pullforce.y;
-        tforces.x += gforce.x + pullforce.x;
-
-        if (ballpos.y >= screenHeight - 34.f) {
-            ballpos.y -= 1.5f;
+        if (ballpos.y > screenHeight - 35.f) {
+            ballpos.y = screenHeight - 35.f;
             tforces.y *= -1.f * 0.60f;
         }
-        if (ballpos.x >= screenWidth - 34.f) {
-            ballpos.x -= 1.5f;
+        if (ballpos.x > screenWidth - 35.f) {
+            ballpos.x = screenWidth - 35.f;
             tforces.x *= -1.f * 0.60f;
         }
-        if (ballpos.y <= 36.f) {
-            ballpos.y += 1.5f;
+        if (ballpos.y < 35.f) {
+            ballpos.y = 35.f;
             tforces.y *= -1.f * 0.60f;
         }
-        if (ballpos.x <= 36.f) {
-            ballpos.x += 1.5f;
+        if (ballpos.x < 35.f) {
+            ballpos.x = 35.f;
             tforces.x *= -1.f * 0.60f;
         }
 
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
             mousepos = GetMousePosition();
-            dist = sqrt(pow((ballpos.x - mousepos.x),2) +pow((ballpos.y - mousepos.y),2)) / 2;
-            DrawLine(ballpos.x, ballpos.y, mousepos.x, mousepos.y, WHITE);
-            printf("%f\n",dist);
+            float dist = sqrt(pow((ballpos.x - mousepos.x),2) +pow((ballpos.y - mousepos.y),2)) * 0.2f;
+            DrawLine(ballpos.x, ballpos.y, mousepos.x, mousepos.y, RED);
 
             if (ballpos.x > mousepos.x) {
-                tforces.x -= dist * 0.4;
+                tforces.x -= dist;
             } else {
-                tforces.x += dist * 0.4;
+                tforces.x += dist;
             }
 
             if (ballpos.y > mousepos.y) {
-                tforces.y -= dist * 0.4;
+                tforces.y -= dist;
             } else {
-                tforces.y += dist * 0.4;
+                tforces.y += dist;
             }
+            
+            DrawLineV(ballpos,tforces, BLUE);
+
         }
+
+        tforces.y += gforce.y;
+        tforces.x += gforce.x;
 
         ballpos.y += tforces.y / 60.f;
         ballpos.x += tforces.x / 60.f;
